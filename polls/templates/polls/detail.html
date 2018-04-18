@@ -1,0 +1,14 @@
+<form action="{% url 'polls:vote'%}" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value={{csrf_token}}>
+    <ol>
+        {% for question in questions %}
+        <li><h3>{{ question.question_text }}</h3>
+            {% for choice in question.choice_set.all %}
+            <input type="radio" name="question_{{ question.id }}" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+            {% endfor %}
+        </li>
+        {% endfor %}
+    </ol>
+    <input type="submit" value="submit"/>
+</form>

@@ -1,0 +1,13 @@
+<h2> Hi {{user.username}}! </h2>
+
+<ol>
+    {% for test in h.test_set.all %}
+    <li>
+        <h4>Data passing: {{test.data_passing}}</h4>
+        <p>Result: Correct answer: {{test.number_of_correct_answer}}, Incorrect answer:
+            {{test.number_of_incorrect_answer}}
+    </li>
+    {% endfor %}
+</ol>
+
+<p><a href="/polls/loggedin">Try again?</a></p>

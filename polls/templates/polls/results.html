@@ -1,0 +1,22 @@
+<h1>{{ user.username }}</h1>
+
+<h2>Correct answer: {{quiz.number_of_correct_answer}}</h2>
+<h2>Incorrect answer: {{quiz.number_of_incorrect_answer}}</h2>
+
+
+<ol>
+    {% for testinfo in quiz.testinfo_set.all %}
+    {% if testinfo.is_user_answered_right %}
+    <li style="background-color: #98FB98;"><h3>{{ testinfo.question_text }}</h3>
+    </li>
+    {% else %}
+    <li style="background-color: #FF0000;"><h3>{{ testinfo.question_text }}</h3>
+        <p>Your answer: {{testinfo.user_answer}}</p>
+        <h4>Right answer: {{testinfo.right_answer}}</h4>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ol>
+
+
+<p><a href="/polls/loggedin">Try again?</a></p>

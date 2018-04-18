@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script src="{% static 'polls/main.js' %}"></script>
+
+<h2>Please login</h2>
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
+
+<form action="auth_view" method="post">{% csrf_token %}
+    <label for="username">User name:</label>
+    <input type="text" name="username" value="" id="username">
+    <label for="password">Password:</label>
+    <input type="password" name="password" value="" id="password">
+
+    <input type="submit" value="login"/>
+</form>
+
+
+
+<div class="b-container">
+    <h3>Don't have an account yet?</h3>
+    <a href="javascript:PopUpShow()">Click to sign up</a>
+</div>
+
+<div class="b-popup" id="popup1">
+    <div class="b-popup-content">
+        <form action="register" method="post">{% csrf_token %}
+            <label for="id_username">User name:</label>
+            <input type="text" name="id_username" value="" id="id_username">
+            <label for="email">email:</label>
+            <input type="text" name="email" value="" id="email">
+            <label for="id_password1">Пароль:</label>
+            <input type="password" name="id_password1" value="" id="id_password1">
+            <input type="submit" value="Register"/>
+        </form>
+        <a href="javascript:PopUpHide()">Hide</a>
+    </div>
+</div>
+
