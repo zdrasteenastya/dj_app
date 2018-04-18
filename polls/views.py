@@ -89,9 +89,9 @@ def invalid_login():
 
 
 def register(request):
-    username = request.POST.get('id_username', '')
-    email = request.POST.get('email', '')
-    password = request.POST.get('id_password1', '')
+    username = request.GET.get('id_username', '')
+    email = request.GET.get('email', '')
+    password = request.GET.get('id_password1', '')
     user = User.objects.create_user(username, email, password)
     user.save()
     auth.login(request, auth.authenticate(username=username, password=password))

@@ -1,38 +1,37 @@
 {% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
 <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
 <script src="{% static 'polls/main.js' %}"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
-<h2>Please login</h2>
-<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
-
-<form action="auth_view" method="post">{% csrf_token %}
-    <label for="username">User name:</label>
-    <input type="text" name="username" value="" id="username">
-    <label for="password">Password:</label>
-    <input type="password" name="password" value="" id="password">
-
-    <input type="submit" value="login"/>
-</form>
-
-
-
-<div class="b-container">
-    <h3>Don't have an account yet?</h3>
-    <a href="javascript:PopUpShow()">Click to sign up</a>
-</div>
-
-<div class="b-popup" id="popup1">
-    <div class="b-popup-content">
-        <form action="register" method="post">{% csrf_token %}
-            <label for="id_username">User name:</label>
-            <input type="text" name="id_username" value="" id="id_username">
-            <label for="email">email:</label>
-            <input type="text" name="email" value="" id="email">
-            <label for="id_password1">Пароль:</label>
-            <input type="password" name="id_password1" value="" id="id_password1">
-            <input type="submit" value="Register"/>
+<br>
+<section class="container text-center">
+    <div class="login">
+        <h1><span id="formHeading">Login or </span><a id="formOption" onclick="formToggle()" href="#">Sign Up</a></h1>
+        <br>
+        <!--Login form-->
+        <form id="login_form" name="login_form" method="post" action="auth_view">{% csrf_token %}
+            <p hidden class="well" id="login_validation_errors"></p>
+            <input id="login_user" type="text" name="username" value="" placeholder="Username"></br>
+            <input id="login_password" type="password" name="password" value="" placeholder="Password"></br>
+            <br>
+            <input id="login_submit" type="submit" name="login_submit" value="Login">
         </form>
-        <a href="javascript:PopUpHide()">Hide</a>
+        <!--Signup form-->
+        <form hidden name="signup_form" id="signup_form" action="register">{% csrf_token %}
+            <p hidden class="well" id="signup_validation_errors"></p>
+            <input id="signup_email" type="text" name="email" value="" placeholder="Email"></br>
+            <input id="signup_username" type="text" name="id_username" value=""
+                   placeholder="Username"></br>
+            <input id="signup_password" type="password" name="id_password1" value="" placeholder="Password"></br>
+            <input id="signup_submit" type="submit" value="Sign up">
+        </form>
+        <!--./signup form-->
+        <hr>
+        <p class="text-center">Forgot your password?<br> <a href="forgot.html">Click here to reset it</a>.</p>
     </div>
-</div>
+</section>
 

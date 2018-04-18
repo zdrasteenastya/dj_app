@@ -8,6 +8,7 @@
     {% for testinfo in quiz.testinfo_set.all %}
     {% if testinfo.is_user_answered_right %}
     <li style="background-color: #98FB98;"><h3>{{ testinfo.question_text }}</h3>
+        <p>Your answer: {{testinfo.user_answer}}</p>
     </li>
     {% else %}
     <li style="background-color: #FF0000;"><h3>{{ testinfo.question_text }}</h3>
