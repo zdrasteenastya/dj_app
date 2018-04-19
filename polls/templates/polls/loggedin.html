@@ -1,14 +1,42 @@
-<h2> Hi {{full_name}} logged in! </h2>
+{% load staticfiles %}
 
-<p>Choose language</p>
-<ul>
-    <li><a href="/polls/detail">Python!</a></li>
-    <li>Something else</li>
-</ul>
-<p></p>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+<link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
 
-<p><a href="/polls/history">Show previous test</a></p>
+<section class="pt-5 pb-5 bg-light inner-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="mt-0 mb-3 text-secondary">Hi, {{full_name}}, logged in!</h1>
+                <div class="breadcrumbs">
+                    <p class="mb-0 text-secondary">Click <a href="/polls/logout">here</a> to logout  /  <span
+                            class="text-success"><a href="/polls/history">Show previous test</a></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
+<br><br>
 
-<p> Click <a href="/polls/logout">here</a> to logout</p>
+<div class="col-md-4">
+    <h2>Choose language</h2>
+    <div class="form-check">
+        <label>
+            <input type="radio" name="radio" checked> <span class="label-text"><a href="/polls/detail">Python</a></span>
+        </label>
+    </div>
+    <div class="form-check">
+        <label>
+            <input type="radio" name="radio"> <span class="label-text">JS</span>
+        </label>
+    </div>
+    <div class="form-check">
+        <label>
+            <input type="radio" name="radio"> <span class="label-text">Database</span>
+        </label>
+    </div>
+</div>

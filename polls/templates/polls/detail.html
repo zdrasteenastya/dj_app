@@ -1,3 +1,10 @@
+{% load staticfiles %}
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'polls/detail.css' %}"/>
+
 {% autoescape off %}
 <form action="{% url 'polls:vote'%}" method="post">
     <input type="hidden" name="csrfmiddlewaretoken" value={{csrf_token}}>
@@ -5,12 +12,24 @@
         {% for question in questions %}
         <li><h3>{{ question.question_text }}</h3>
             {% for choice in question.choice_set.all %}
-            <input type="radio" name="question_{{ question.id }}" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
+            <input type="radio" name="question_{{ question.id }}" id="choice{{ forloop.counter }}"
+                   value="{{ choice.id }}"/>
             <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
             {% endfor %}
         </li>
         {% endfor %}
     </ol>
-    <input type="submit" value="submit"/>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-labeled btn-primary">
+                    <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>&nbsp;&nbsp;Submit
+                </button>
+                <br/>
+            </div>
+        </div>
+    </div>
 </form>
 {% endautoescape %}
+
+
