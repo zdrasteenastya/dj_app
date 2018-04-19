@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^loggedin/$', views.loggedin),
     url(r'^invalid/$', views.invalid_login),
     url(r'^detail/$', views.detail),
-    url(r'^history/$', views.history)
+    url(r'^history/$', views.history),
+    url(r'^forgot', views.forgot)
 ]

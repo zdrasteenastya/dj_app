@@ -1,3 +1,4 @@
+import random
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -10,13 +11,17 @@ from django.template.context_processors import csrf
 from .models import Question, Test, TestInfo
 from django.contrib.auth.models import User
 
+NUMBER_OF_QUESTION_PER_TEST = 5
+
 
 def index(request):
     return render(request, 'polls/index.html')
 
 
 def detail(request):
-    number_questions = [2, 4, 3]
+    all_questions = range(1, len(Question.objects.all()) + 1)
+    random.shuffle(all_questions)
+    number_questions = all_questions[:NUMBER_OF_QUESTION_PER_TEST]
     questions = []
     for question_id in number_questions:
         questions.append(get_object_or_404(Question, pk=question_id))
@@ -102,3 +107,9 @@ def history(request):
     # Define user
     h = get_object_or_404(User, pk=request.user.pk)
     return render(request, 'polls/history.html', {'h': h})
+
+
+def forgot(request):
+    # email = request.POST.get('email', '')
+    # User.objects.filter(email=email)
+    return render(request, 'polls/forgot.html')
