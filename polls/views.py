@@ -96,8 +96,8 @@ def admin_view(request):
     return render_to_response('polls/admin_view.html', {'full_name': request.user.username, 'tests': Test.objects.all()})
 
 
-def invalid_login():
-    return render_to_response('polls/invalid_login.html')
+def invalid_login(request):
+    return render(request, 'polls/invalid_login.html')
 
 
 def register(request):
