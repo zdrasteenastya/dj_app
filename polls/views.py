@@ -75,7 +75,10 @@ def auth_view(request):
 
     if user is not None:
         auth.login(request, user)
-        return HttpResponseRedirect('loggedin')
+        if user.groups.filter(name='admin').exists():
+            return HttpResponseRedirect('admin_view')
+        else:
+            return HttpResponseRedirect('loggedin')
     else:
         return HttpResponseRedirect('invalid_login')
 
@@ -86,7 +89,11 @@ def logout(request):
 
 
 def loggedin(request):
-    return render_to_response('polls/loggedin.html', {'full_name': request.user.username})
+    return render_to_response('polls/loggedin.html', {'user': request.user, 'is_admin': request.user.groups.filter(name='admin').exists()})
+
+
+def admin_view(request):
+    return render_to_response('polls/admin_view.html', {'full_name': request.user.username, 'tests': Test.objects.all()})
 
 
 def invalid_login():

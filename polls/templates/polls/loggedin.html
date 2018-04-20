@@ -10,10 +10,15 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1 class="mt-0 mb-3 text-secondary">Hi, {{full_name}}, logged in!</h1>
+                <h1 class="mt-0 mb-3 text-secondary">Hi, {{user.username}}, logged in!</h1>
                 <div class="breadcrumbs">
-                    <p class="mb-0 text-secondary">Click <a href="/polls/logout">here</a> to logout  /  <span
+                    {% if is_admin%}
+                    <p class="mb-0 text-secondary">Click <a href="/polls">here</a> to logout  /  <span
+                            class="text-success"><a href="/polls/admin_view">Show page with results</a></span></p>
+                    {%else%}
+                    <p class="mb-0 text-secondary">Click <a href="/polls">here</a> to logout  /  <span
                             class="text-success"><a href="/polls/history">Show previous test</a></span></p>
+                    {%endif%}
                 </div>
             </div>
         </div>
@@ -40,3 +45,6 @@
         </label>
     </div>
 </div>
+
+
+
