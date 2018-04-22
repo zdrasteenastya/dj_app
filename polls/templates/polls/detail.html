@@ -1,16 +1,18 @@
 {% load staticfiles %}
 
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'polls/detail.css' %}"/>
+<script src="{% static 'polls/detail.js' %}"></script>
+
 
 {% autoescape off %}
-<form action="{% url 'polls:vote'%}" method="post">
+<form action="{% url 'polls:vote'%}" method="post" name="quiz">
     <input type="hidden" name="csrfmiddlewaretoken" value={{csrf_token}}>
     <ol>
         {% for question in questions %}
-        <li><h3>{{ question.question_text }}</h3>
+        <li><h3 class="question">{{ question.question_text }}</h3>
             {% for choice in question.choice_set.all %}
             <input type="radio" name="question_{{ question.id }}" id="choice{{ forloop.counter }}"
                    value="{{ choice.id }}"/>
@@ -22,7 +24,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <button type="submit" class="btn btn-labeled btn-primary">
+                <button type="submit" class="btn btn-labeled btn-primary" onclick="checkChoice();">
                     <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>&nbsp;&nbsp;Submit
                 </button>
                 <br/>

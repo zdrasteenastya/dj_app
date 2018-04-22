@@ -15,5 +15,7 @@ urlpatterns = [
     url(r'^invalid_login', views.invalid_login),
     url(r'^detail/$', views.detail),
     url(r'^history/$', views.history),
-    url(r'^forgot', views.forgot)
+    url(r'^forgot', views.forgot),
+    url(r'^add_question', views.add_question),
+    url(r'^upload_file', views.upload_file)
 ]

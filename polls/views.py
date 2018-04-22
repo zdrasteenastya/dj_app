@@ -7,8 +7,10 @@ from django.views import generic
 from django.shortcuts import render, redirect, render_to_response
 from django.contrib import auth
 from django.template.context_processors import csrf
+from django import forms
 
-from .models import Question, Test, TestInfo
+from polls.templates.utils.files import handle_uploaded_file
+from .models import Question, Choice, Test, TestInfo
 from django.contrib.auth.models import User
 
 NUMBER_OF_QUESTION_PER_TEST = 5
@@ -51,6 +53,7 @@ def vote(request):
         question = get_object_or_404(Question, pk=question_id)
         quiz_info.question_text = question.question_text
         selected_choice = question.choice_set.get(pk=answer_id)
+
         quiz_info.user_answer = selected_choice.choice_text
         right_choice = ''
         if selected_choice.is_right:
@@ -65,6 +68,7 @@ def vote(request):
     quiz.save()
 
     q = get_object_or_404(Test, pk=quiz.pk)
+
     return render(request, 'polls/results.html', {'quiz': q})
 
 
@@ -89,11 +93,13 @@ def logout(request):
 
 
 def loggedin(request):
-    return render_to_response('polls/loggedin.html', {'user': request.user, 'is_admin': request.user.groups.filter(name='admin').exists()})
+    return render_to_response('polls/loggedin.html',
+                              {'user': request.user, 'is_admin': request.user.groups.filter(name='admin').exists()})
 
 
 def admin_view(request):
-    return render_to_response('polls/admin_view.html', {'full_name': request.user.username, 'tests': Test.objects.all()})
+    return render_to_response('polls/admin_view.html',
+                              {'full_name': request.user.username, 'tests': Test.objects.all()})
 
 
 def invalid_login(request):
@@ -120,3 +126,19 @@ def forgot(request):
     # email = request.POST.get('email', '')
     # User.objects.filter(email=email)
     return render(request, 'polls/forgot.html')
+
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    file = forms.FileField()
+
+
+def upload_file(request):
+    form = UploadFileForm(request.POST, request.FILES)
+    if form.is_valid():
+        handle_uploaded_file(request.FILES['file'])
+    return render(request, 'polls/upload_file.html')
+
+
+def add_question(request):
+    return render(request, 'polls/add_question.html')
