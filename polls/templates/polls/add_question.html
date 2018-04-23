@@ -4,8 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'polls/add_question.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
 <script src="{% static 'polls/add_question.js' %}"></script>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css1">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
 <section class="pt-5 pb-5 bg-light inner-header">
@@ -25,25 +24,40 @@
 <br>
 <br>
 <br>
-<form action="upload_file" method="post">{%csrf_token%}
-    <div class="input-group">
-    <span class="input-group-btn">
-		<button id="fake-file-button-browse" type="button" class="btn btn-default">
-			<span class="glyphicon glyphicon-file"></span>
-		</button>
-	</span>
-        <input type="file" id="files-input-upload" style="display:none">
+
+<form action="upload_file" enctype="multipart/form-data" method="post">{%csrf_token%}
+    <div>
+        <button id="fake-file-button-browse" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-file"></span>
+        </button>
+        <input type="file" name="file" style="display:none" id="files-input-upload">
         <input type="text" id="fake-file-input-name" disabled="disabled" placeholder="File not selected"
                class="form-control">
-        <span class="input-group-btn">
-        <input value="submit" type="submit">
-		<button type="button" class="btn btn-default" disabled="disabled" id="fake-file-button-upload">
-			<span class="glyphicon glyphicon-upload"></span>
-		</button>
-	</span>
+        <input type="submit" value="Отправить" class="btn btn-default">
     </div>
+</form>
+<br>
+<div id="example">
+    <h3>To add new questions, please create and download such .xml file</h3>
+    <textarea readonly cols="60" rows="17"><?xml version="1.0" encoding="utf-8"?>
+        <xml>
+        <question question_text="Question 1?">
+            <choice is_right="false">Choice 1</choice>
+            <choice is_right="false">Choice 2</choice>
+            <choice is_right="true">Choice 3</choice>
+            <choice is_right="false">Choice 4</choice>
+        </question>
+        <question question_text="Question 2?">
+            <choice is_right="false">Choice 1</choice>
+            <choice is_right="false">Choice 2</choice>
+            <choice is_right="true">Choice 3</choice>
+            <choice is_right="false">Choice 4</choice>
+        </question>
+    </xml>
+    </textarea>
+</div>
 
-    <script>
+<script>
     document.getElementById('fake-file-button-browse').addEventListener('click', function() {
 	document.getElementById('files-input-upload').click();
 });
@@ -54,6 +68,5 @@ document.getElementById('files-input-upload').addEventListener('change', functio
 	document.getElementById('fake-file-button-upload').removeAttribute('disabled');
 });
 
-    </script>
 
-
+</script>

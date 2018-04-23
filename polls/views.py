@@ -1,16 +1,13 @@
 import random
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.utils import timezone
-from django.views import generic
-from django.shortcuts import render, redirect, render_to_response
-from django.contrib import auth
-from django.template.context_processors import csrf
-from django import forms
 
-from polls.templates.utils.files import handle_uploaded_file
-from .models import Question, Choice, Test, TestInfo
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.shortcuts import render, render_to_response
+from django.contrib import auth
+
+from .utils import handle_uploaded_file
+from .models import Question, Test, TestInfo
 from django.contrib.auth.models import User
 
 NUMBER_OF_QUESTION_PER_TEST = 5
@@ -128,15 +125,8 @@ def forgot(request):
     return render(request, 'polls/forgot.html')
 
 
-class UploadFileForm(forms.Form):
-    title = forms.CharField(max_length=50)
-    file = forms.FileField()
-
-
 def upload_file(request):
-    form = UploadFileForm(request.POST, request.FILES)
-    if form.is_valid():
-        handle_uploaded_file(request.FILES['file'])
+    handle_uploaded_file(request.FILES['file'])
     return render(request, 'polls/upload_file.html')
 
 
