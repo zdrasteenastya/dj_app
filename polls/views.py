@@ -23,6 +23,7 @@ def detail(request):
     random.shuffle(all_questions)
     number_questions = all_questions[:NUMBER_OF_QUESTION_PER_TEST]
     questions = []
+    # questions.append(get_object_or_404(Question, pk=20))
     for question_id in number_questions:
         questions.append(get_object_or_404(Question, pk=question_id))
     return render(request, 'polls/detail.html', {'questions': questions})
@@ -40,10 +41,11 @@ def vote(request):
     quiz = Test(user=current_user, data_passing=timezone.now())
     quiz.save()
     results = {}
-    for question, answer in request.POST.items():
-        if question == 'csrfmiddlewaretoken':
-            continue
-        results[int(question.split('_')[1])] = int(answer)
+    for question in request.POST.keys():
+        if 'question_' in question:
+            answers = request.POST.getlist(question)
+            results[int(question.split('_')[1])] = int(answers[0])
+            # results[int(question.split('_')[1])] = [int(answer) for answer in answers]
 
     for question_id, answer_id in results.items():
         quiz_info = TestInfo(test_id=quiz)
