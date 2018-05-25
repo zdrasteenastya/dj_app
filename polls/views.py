@@ -1,14 +1,14 @@
 import random
 
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.shortcuts import render, render_to_response
 from django.contrib import auth
-
-from .utils import handle_uploaded_file
-from .models import Question, Test, TestInfo
 from django.contrib.auth.models import User
+
+from .utils import handle_uploaded_file, admin_required, login_required
+from .models import Question, Test, TestInfo
 
 NUMBER_OF_QUESTION_PER_TEST = 5
 
@@ -17,6 +17,7 @@ def index(request):
     return render(request, 'polls/index.html')
 
 
+@login_required
 def detail(request):
     all_questions = range(1, len(Question.objects.all()) + 1)
     random.shuffle(all_questions)
@@ -86,14 +87,16 @@ def auth_view(request):
 
 def logout(request):
     auth.logout(request)
-    return render_to_response('polls/logout.html')
+    return redirect('/polls')
 
 
+@login_required
 def loggedin(request):
     return render_to_response('polls/loggedin.html',
                               {'user': request.user, 'is_admin': request.user.groups.filter(name='admin').exists()})
 
 
+@admin_required
 def admin_view(request):
     return render_to_response('polls/admin_view.html',
                               {'full_name': request.user.username, 'tests': Test.objects.all()})
@@ -113,12 +116,14 @@ def register(request):
     return HttpResponseRedirect('loggedin')
 
 
+@login_required
 def history(request):
     # Define user
     h = get_object_or_404(User, pk=request.user.pk)
     return render(request, 'polls/history.html', {'h': h})
 
 
+# TODO
 def forgot(request):
     # email = request.POST.get('email', '')
     # User.objects.filter(email=email)
@@ -130,5 +135,6 @@ def upload_file(request):
     return render(request, 'polls/upload_file.html')
 
 
+@admin_required
 def add_question(request):
     return render(request, 'polls/add_question.html')
