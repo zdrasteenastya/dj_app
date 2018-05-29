@@ -1,23 +1,40 @@
-<h1>{{ user.username }}</h1>
+{% load staticfiles %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
+
+<section class="pt-5 pb-5 bg-light inner-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="mt-0 mb-3 text-secondary">{{user.username}}, your result: </h1>
+                <div class="breadcrumbs">
+                    <p class="mb-0 text-secondary"><a href="/polls/loggedin">Try again?</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <h2>Correct answer: {{quiz.number_of_correct_answer}}</h2>
+<br/>
 <h2>Incorrect answer: {{quiz.number_of_incorrect_answer}}</h2>
+<br/>
 
-
-<ol>
+{% autoescape off %}
+<div class="col-md-6">
+<ol class="list-group">
     {% for testinfo in quiz.testinfo_set.all %}
     {% if testinfo.is_user_answered_right %}
-    <li style="background-color: #98FB98;"><h3>{{ testinfo.question_text }}</h3>
+    <li class="list-group-item list-group-item-success"><h5>{{ testinfo.question_text }}</h5>
         <p>Your answer: {{testinfo.user_answer}}</p>
     </li>
     {% else %}
-    <li style="background-color: #FF0000;"><h3>{{ testinfo.question_text }}</h3>
+    <li class="list-group-item list-group-item-danger"><h5>{{ testinfo.question_text }}</h5>
         <p>Your answer: {{testinfo.user_answer}}</p>
-        <h4>Right answer: {{testinfo.right_answer}}</h4>
+        <h6>Right answer: {{testinfo.right_answer}}</h6>
     </li>
     {% endif %}
     {% endfor %}
 </ol>
-
-
-<p><a href="/polls/loggedin">Try again?</a></p>
+</div>
+{% endautoescape %}

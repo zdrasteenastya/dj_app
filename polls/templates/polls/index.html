@@ -23,7 +23,7 @@
             <input id="login_submit" type="submit" name="login_submit" value="Login">
         </form>
         <!--Signup form-->
-        <form hidden name="signup_form" id="signup_form" action="register">{% csrf_token %}
+        <form hidden name="signup_form" id="signup_form" action="register" method="post">{% csrf_token %}
             <p hidden class="well" id="signup_validation_errors"></p>
             <input id="signup_email" type="text" name="email" value="" placeholder="Email"></br>
             <input id="signup_username" type="text" name="id_username" value=""

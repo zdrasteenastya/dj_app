@@ -1,27 +1,25 @@
 {% load staticfiles %}
 
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="{% static 'polls/detail.js' %}"></script>
 
 
 {% autoescape off %}
+<div class="col-md-6">
 <form action="{% url 'polls:vote'%}" method="post" name="quiz">
     <input type="hidden" name="csrfmiddlewaretoken" value={{csrf_token}}>
-    <ol>
+    <ol class="list-group">
         {% for question in questions %}
-        {{question.multi_answer}}
         {% if question.multi_answer%}
-        <li><h3 class="question">{{ question.question_text }}</h3>
+        <li class="list-group-item"><h3 class="question">{{ question.question_text }}</h3>
             {% for choice in question.choice_set.all %}
             <input type="checkbox" name="question_{{ question.id }}" value="{{ choice.id }}"/>
             <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
             {% endfor %}
         </li>
         {%else%}
-        <li><h3 class="question">{{ question.question_text }}</h3>
+        <li class="list-group-item"><h3 class="question">{{ question.question_text }}</h3>
             {% for choice in question.choice_set.all %}
             <input type="radio" name="question_{{ question.id }}" id="choice{{ forloop.counter }}"
                    value="{{ choice.id }}"/>
@@ -42,6 +40,7 @@
         </div>
     </div>
 </form>
+</div>
 {% endautoescape %}
 
 

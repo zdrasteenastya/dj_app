@@ -1,117 +1,105 @@
 import random
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
-from django.utils import timezone
-from django.shortcuts import render, render_to_response
 from django.contrib import auth
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render, render_to_response
 
-from .utils import handle_uploaded_file, admin_required, login_required
-from .models import Question, Test, TestInfo
+from .utils import handle_uploaded_file, admin_required, login_required, get_results
+from .models import Question, Test
 
 NUMBER_OF_QUESTION_PER_TEST = 5
 
 
 def index(request):
+    """ Render main page """
     return render(request, 'polls/index.html')
 
 
 @login_required
 def detail(request):
-    all_questions = range(1, len(Question.objects.all()) + 1)
-    random.shuffle(all_questions)
-    number_questions = all_questions[:NUMBER_OF_QUESTION_PER_TEST]
-    questions = []
-    # questions.append(get_object_or_404(Question, pk=20))
-    for question_id in number_questions:
-        questions.append(get_object_or_404(Question, pk=question_id))
+    """ Returns the required number of randomly selected questions  """
+    list_ids_questions = [question.pk for question in Question.objects.all()]
+    random.shuffle(list_ids_questions)
+    number_questions = list_ids_questions[:NUMBER_OF_QUESTION_PER_TEST]
+    questions = [get_object_or_404(Question, pk=question_id) for question_id in number_questions]
     return render(request, 'polls/detail.html', {'questions': questions})
 
 
-def results(request, ids):
+def results(request):
+    """ Render page with current quiz result """
     return render(request, 'polls/results.html')
 
 
 def vote(request):
-    # Define user
+    """ Handle current quiz """
     current_user = get_object_or_404(User, pk=request.user.pk)
-
-    # Create a new quiz and quiz info
-    quiz = Test(user=current_user, data_passing=timezone.now())
-    quiz.save()
-    results = {}
-    for question in request.POST.keys():
-        if 'question_' in question:
-            answers = request.POST.getlist(question)
-            results[int(question.split('_')[1])] = int(answers[0])
-            # results[int(question.split('_')[1])] = [int(answer) for answer in answers]
-
-    for question_id, answer_id in results.items():
-        quiz_info = TestInfo(test_id=quiz)
-        quiz_info.save()
-        question = get_object_or_404(Question, pk=question_id)
-        quiz_info.question_text = question.question_text
-        selected_choice = question.choice_set.get(pk=answer_id)
-
-        quiz_info.user_answer = selected_choice.choice_text
-        right_choice = ''
-        if selected_choice.is_right:
-            quiz.number_of_correct_answer += 1
-            quiz_info.is_user_answered_right = True
-        else:
-            quiz.number_of_incorrect_answer += 1
-            right_choice = question.choice_set.filter(is_right=True)[0].choice_text
-            quiz_info.is_user_answered_right = False
-        quiz_info.right_answer = right_choice if right_choice else selected_choice.choice_text
-        quiz_info.save()
-    quiz.save()
-
-    q = get_object_or_404(Test, pk=quiz.pk)
-
-    return render(request, 'polls/results.html', {'quiz': q})
+    form_data = {
+        int(question.split('_')[1]): [int(answer) for answer in request.POST.getlist(question)]
+        for question in request.POST.keys() if 'question_' in question
+    }
+    quiz_id = get_results(form_data, current_user)
+    return render(
+        request, 'polls/results.html',
+        {'quiz': get_object_or_404(Test, pk=quiz_id)}
+    )
 
 
 def auth_view(request):
-    username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
+    """ Login user """
+    username, password = {
+        request.POST.get(credential, '') for credential in ['username', 'password']
+    }
     user = auth.authenticate(username=username, password=password)
-
     if user is not None:
         auth.login(request, user)
-        if user.groups.filter(name='admin').exists():
-            return HttpResponseRedirect('admin_view')
-        else:
-            return HttpResponseRedirect('loggedin')
+        page = 'admin_view' if user.groups.filter(name='admin').exists() else 'loggedin'
+        return HttpResponseRedirect(page)
     else:
         return HttpResponseRedirect('invalid_login')
 
 
 def logout(request):
+    """ Logout user ans redirect to the main page """
     auth.logout(request)
     return redirect('/polls')
 
 
 @login_required
 def loggedin(request):
-    return render_to_response('polls/loggedin.html',
-                              {'user': request.user, 'is_admin': request.user.groups.filter(name='admin').exists()})
+    """ Render page with quiz selection"""
+    return render_to_response(
+        'polls/loggedin.html',
+        {
+            'user': request.user,
+            'is_admin': request.user.groups.filter(name='admin').exists()
+        }
+    )
 
 
 @admin_required
 def admin_view(request):
-    return render_to_response('polls/admin_view.html',
-                              {'full_name': request.user.username, 'tests': Test.objects.all()})
+    """ Render page with results for all users """
+    return render_to_response(
+        'polls/admin_view.html',
+        {
+            'full_name': request.user.username,
+            'tests': Test.objects.all()
+        }
+    )
 
 
 def invalid_login(request):
+    """ In case wrong auth data """
     return render(request, 'polls/invalid_login.html')
 
 
 def register(request):
-    username = request.GET.get('id_username', '')
-    email = request.GET.get('email', '')
-    password = request.GET.get('id_password1', '')
+    """ Register a new user and redirect to page with quiz selection """
+    username, email, password = {
+        request.POST.get(credential, '')
+        for credential in ['id_username', 'email', 'id_password1']
+    }
     user = User.objects.create_user(username, email, password)
     user.save()
     auth.login(request, auth.authenticate(username=username, password=password))
@@ -120,23 +108,26 @@ def register(request):
 
 @login_required
 def history(request):
-    # Define user
-    h = get_object_or_404(User, pk=request.user.pk)
-    return render(request, 'polls/history.html', {'h': h})
+    """ Render page with all quizzes for current user"""
+    current_user = get_object_or_404(User, pk=request.user.pk)
+    return render(request, 'polls/history.html', {'h': current_user})
 
 
 # TODO
 def forgot(request):
+    """ Define user, using email address, and send email with password """
     # email = request.POST.get('email', '')
     # User.objects.filter(email=email)
     return render(request, 'polls/forgot.html')
 
 
 def upload_file(request):
+    """ Handle xml file for adding new questions """
     handle_uploaded_file(request.FILES['file'])
     return render(request, 'polls/upload_file.html')
 
 
 @admin_required
 def add_question(request):
+    """ Render page for downloading file """
     return render(request, 'polls/add_question.html')

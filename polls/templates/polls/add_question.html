@@ -1,11 +1,10 @@
 {% load staticfiles %}
 
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'polls/add_question.css' %}"/>
-<link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
-<script src="{% static 'polls/add_question.js' %}"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="{% static 'polls/add_question.js' %}"></script>
 
 <section class="pt-5 pb-5 bg-light inner-header">
     <div class="container">
@@ -24,10 +23,9 @@
 <br>
 <br>
 <br>
-
 <form action="upload_file" enctype="multipart/form-data" method="post">{%csrf_token%}
     <div>
-        <button id="fake-file-button-browse" type="button" class="btn btn-default">
+        <button id="fake-file-button-browse" type="button" class="btn btn-default" onclick="uploadFile();">
             <span class="glyphicon glyphicon-file"></span>
         </button>
         <input type="file" name="file" style="display:none" id="files-input-upload">
@@ -57,16 +55,3 @@
     </textarea>
 </div>
 
-<script>
-    document.getElementById('fake-file-button-browse').addEventListener('click', function() {
-	document.getElementById('files-input-upload').click();
-});
-
-document.getElementById('files-input-upload').addEventListener('change', function() {
-	document.getElementById('fake-file-input-name').value = this.value;
-
-	document.getElementById('fake-file-button-upload').removeAttribute('disabled');
-});
-
-
-</script>
