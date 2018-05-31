@@ -66,7 +66,7 @@ def get_results(results, current_user):
         quiz_info.user_answer = ','.join(choice.choice_text for choice in user_choices)
         quiz_info.right_answer = ','.join(answer.choice_text for answer in right_answers)
 
-        if all([[c.is_right for c in user_choices], len(user_choices) == len(right_answers)]):
+        if all([c.is_right for c in user_choices]) and len(user_choices) == len(right_answers):
             quiz.number_of_correct_answer += 1
             quiz_info.is_user_answered_right = True
         else:
