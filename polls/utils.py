@@ -48,7 +48,7 @@ def get_results(results, current_user):
         ]
         right_answers = question.choice_set.filter(is_right=True)
 
-        test_info.user_answer = dumps(user_choices) if is_text_field else dumps(
+        test_info.user_answer = dumps([user_choices]) if is_text_field else dumps(
             [choice.choice_text for choice in user_choices]
         )
         test_info.right_answer = dumps([answer.choice_text for answer in right_answers])
