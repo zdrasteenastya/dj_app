@@ -1,4 +1,6 @@
+{% load filter %}
 {% load staticfiles %}
+
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
 
@@ -6,7 +8,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1 class="mt-0 mb-3 text-secondary">{{user.username}}, your result: </h1>
+                <h1 class="mt-0 mb-3 text-secondary">{{ user.username }}, your result: </h1>
                 <div class="breadcrumbs">
                     <p class="mb-0 text-secondary"><a href="/polls/loggedin">Try again?</a></p>
                 </div>
@@ -15,26 +17,27 @@
     </div>
 </section>
 
-<h2>Correct answer: {{quiz.number_of_correct_answer}}</h2>
+<h2>Correct answer: {{ test.number_of_correct_answer }}</h2>
 <br/>
-<h2>Incorrect answer: {{quiz.number_of_incorrect_answer}}</h2>
+<h2>Incorrect answer: {{ test.number_of_incorrect_answer }}</h2>
 <br/>
 
 {% autoescape off %}
 <div class="col-md-6">
-<ol class="list-group">
-    {% for testinfo in quiz.testinfo_set.all %}
-    {% if testinfo.is_user_answered_right %}
-    <li class="list-group-item list-group-item-success"><h5>{{ testinfo.question_text }}</h5>
-        <p>Your answer: {{testinfo.user_answer}}</p>
-    </li>
-    {% else %}
-    <li class="list-group-item list-group-item-danger"><h5>{{ testinfo.question_text }}</h5>
-        <p>Your answer: {{testinfo.user_answer}}</p>
-        <h6>Right answer: {{testinfo.right_answer}}</h6>
-    </li>
-    {% endif %}
-    {% endfor %}
-</ol>
+    <ol class="list-group">
+        {% for testinfo in test.testinfo_set.all %}
+        {% if testinfo.is_user_answered_right %}
+        <li class="list-group-item list-group-item-success"><h5>{{ testinfo.question_text }}</h5>
+            <p>Your answer: {{ testinfo.user_answer|json }}</p>
+        </li>
+        {% else %}
+        <li class="list-group-item list-group-item-danger"><h5>{{ testinfo.question_text }}</h5>
+            <p>Your answer: {{ testinfo.user_answer|json }}</p>
+            <h6>Right answer: {{ testinfo.right_answer|json }}</h6>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ol>
 </div>
 {% endautoescape %}
+

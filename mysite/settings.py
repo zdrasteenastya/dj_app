@@ -18,15 +18,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
+LOGIN_URL = '/polls/'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'vbz0q+c3=@3z82u4ivybx&#m9%0fri&zj(^nu(-#&sod_1#g3#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
+DEBUG = True
+
+NUMBER_OF_QUESTION_PER_TEST = 5
 
 # Application definition
 

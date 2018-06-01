@@ -1,30 +1,6 @@
-{% load staticfiles %}
+{% extends 'polls/base.html' %}
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-<section class="pt-5 pb-5 bg-light inner-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h1 class="mt-0 mb-3 text-secondary">Hi, {{user.username}}, logged in!</h1>
-                <div class="breadcrumbs">
-                    {% if is_admin%}
-                    <p class="mb-0 text-secondary">Click <a href="/polls/logout">here</a> to logout  /  <span
-                            class="text-success"><a href="/polls/admin_view">Show page with results</a></span>&nbsp;&nbsp;  /&nbsp;&nbsp;  <a href="/polls/add_question">Add questions<a></p>
-                    {%else%}
-                    <p class="mb-0 text-secondary">Click <a href="/polls/logout">here</a> to logout  /  <span
-                            class="text-success"><a href="/polls/history">Show previous test</a></span></p>
-                    {%endif%}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<br><br>
-
+{% block content %}
 <div class="col-md-4">
     <h2>Choose language</h2>
     <div class="form-check">
@@ -43,6 +19,6 @@
         </label>
     </div>
 </div>
-
+{% endblock %}
 
 

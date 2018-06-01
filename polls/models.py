@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     multi_answer = models.BooleanField(default=False)
+    question_type = models.CharField(max_length=200, default='python')
 
     def __str__(self):
         return self.question_text
@@ -27,7 +28,7 @@ class Test(models.Model):
 
 
 class TestInfo(models.Model):
-    test_id = models.ForeignKey(Test, on_delete=models.CASCADE)
+    test = models.ForeignKey(Test, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200)
     user_answer = models.CharField(max_length=200)
     right_answer = models.CharField(max_length=200)

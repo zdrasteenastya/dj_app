@@ -1,7 +1,9 @@
-li a {
-    color: green;
+li a
+{
+	color: green;
 }
-body {
-    background: white url("images/1.jpg") no-repeat right bottom;
-    background-size: 50% auto;
+body
+{
+	background: white url("images/1.jpg") no-repeat right bottom;
+	background-size: 50% auto;
 }

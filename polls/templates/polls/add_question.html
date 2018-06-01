@@ -1,43 +1,19 @@
-{% load staticfiles %}
+{% extends 'polls/base.html' %}
+{% block content %}
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="{% static 'polls/add_question.js' %}"></script>
-
-<section class="pt-5 pb-5 bg-light inner-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h1 class="mt-0 mb-3 text-secondary">Add xml file</h1>
-                <div class="breadcrumbs">
-                    <p class="mb-0 text-secondary">Click <a href="/polls/logout">here</a> to logout  /  <span
-                            class="text-success"><a href="/polls/loggedin">Show page with test</a></span></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<br>
-<br>
-<br>
-<br>
-<form action="upload_file" enctype="multipart/form-data" method="post">{%csrf_token%}
-    <div>
-        <button id="fake-file-button-browse" type="button" class="btn btn-default" onclick="uploadFile();">
-            <span class="glyphicon glyphicon-file"></span>
-        </button>
-        <input type="file" name="file" style="display:none" id="files-input-upload">
-        <input type="text" id="fake-file-input-name" disabled="disabled" placeholder="File not selected"
-               class="form-control">
-        <input type="submit" value="Отправить" class="btn btn-default">
-    </div>
+<form action="upload_file" enctype="multipart/form-data" method="post">
+   {% csrf_token %}
+   <div class="input-group input-group-lg">
+      <button id="fake-file-button-browse" type="button" class="btn btn-default" onclick="uploadFile();">Upload</button>
+      <input type="file" name="file" style="display:none" id="files-input-upload">
+      <input type="text" id="fake-file-input-name" disabled="disabled" placeholder="File not selected" class="form-control">
+      <input type="submit" value="Отправить" class="btn btn-default">
+   </div>
 </form>
 <br>
 <div id="example">
-    <h3>To add new questions, please create and download such .xml file</h3>
-    <textarea readonly cols="60" rows="17"><?xml version="1.0" encoding="utf-8"?>
+   <h3>To add new questions, please create and download such .xml file</h3>
+   <textarea readonly cols="60" rows="17"><?xml version="1.0" encoding="utf-8"?>
         <xml>
         <question question_text="Question 1?">
             <choice is_right="false">Choice 1</choice>
@@ -54,4 +30,4 @@
     </xml>
     </textarea>
 </div>
-
+{% endblock %}

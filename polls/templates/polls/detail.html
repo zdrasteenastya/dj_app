@@ -1,9 +1,6 @@
 {% load staticfiles %}
 
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="{% static 'polls/detail.js' %}"></script>
-
+<link href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
 {% autoescape off %}
 <div class="col-md-6">
@@ -11,7 +8,7 @@
     <input type="hidden" name="csrfmiddlewaretoken" value={{csrf_token}}>
     <ol class="list-group">
         {% for question in questions %}
-        {% if question.multi_answer%}
+        {% if question.multi_answer %}
         <li class="list-group-item"><h3 class="question">{{ question.question_text }}</h3>
             {% for choice in question.choice_set.all %}
             <input type="checkbox" name="question_{{ question.id }}" value="{{ choice.id }}"/>
@@ -20,21 +17,24 @@
         </li>
         {%else%}
         <li class="list-group-item"><h3 class="question">{{ question.question_text }}</h3>
+            {% if question.choice_set.count == 1 %}
+            <input type="text" name="question_{{ question.id }}"/>
+            {% else %}
             {% for choice in question.choice_set.all %}
             <input type="radio" name="question_{{ question.id }}" id="choice{{ forloop.counter }}"
                    value="{{ choice.id }}"/>
             <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
             {% endfor %}
+            {% endif %}
         </li>
-        {%endif%}
+        {% endif %}
         {% endfor %}
     </ol>
+    <br/>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <button type="submit" class="btn btn-labeled btn-primary" onclick="checkChoice();">
-                    <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>&nbsp;&nbsp;Submit
-                </button>
+                <button type="submit" class="btn btn-primary btn-lg active" onclick="checkChoice();">Submit</button>
                 <br/>
             </div>
         </div>

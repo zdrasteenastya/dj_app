@@ -1,28 +1,6 @@
-{% load staticfiles %}
+{% extends 'polls/base.html' %}
+{% block content %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css1">
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="{% static 'polls/admin_view.js' %}"></script>
-
-<section class="pt-5 pb-5 bg-light inner-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h1 class="mt-0 mb-3 text-secondary">Hi, {{full_name}}, logged in!</h1>
-                <div class="breadcrumbs">
-                    <p class="mb-0 text-secondary">Click <a href="/polls/logout">here</a> to logout  /  <a href="/polls/loggedin">Show page with test</a>  /  <a href="/polls/add_question">Add questions</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<br>
-<br>
-<br>
-<br>
 <div class="container">
     <div class="row">
         <div class="table-responsive">
@@ -38,21 +16,21 @@
                 </thead>
                 <tbody id="myTable">
                 {% for test in tests %}
-                {%if test.number_of_correct_answer > test.number_of_incorrect_answer%}
+                {% if test.number_of_correct_answer > test.number_of_incorrect_answer %}
                 <tr class="bg-success">
                     <td>{{ forloop.counter }}</td>
-                    <td>{{test.user}}</td>
-                    <td>{{test.data_passing}}</td>
-                    <td>{{test.number_of_correct_answer}}</td>
-                    <td>{{test.number_of_incorrect_answer}}</td>
+                    <td>{{ test.user }}</td>
+                    <td>{{ test.data_passing }}</td>
+                    <td>{{ test.number_of_correct_answer }}</td>
+                    <td>{{ test.number_of_incorrect_answer }}</td>
                 </tr>
                 {% else %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{test.user}}</td>
-                    <td>{{test.data_passing}}</td>
-                    <td>{{test.number_of_correct_answer}}</td>
-                    <td>{{test.number_of_incorrect_answer}}</td>
+                    <td>{{ test.user }}</td>
+                    <td>{{ test.data_passing }}</td>
+                    <td>{{ test.number_of_correct_answer }}</td>
+                    <td>{{ test.number_of_incorrect_answer }}</td>
                 </tr>
                 {% endif %}
                 {% endfor %}
@@ -64,7 +42,7 @@
         </div>
     </div>
 </div>
-
+{% endblock %}
 
 
 

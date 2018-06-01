@@ -1,24 +1,6 @@
-{% load staticfiles %}
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link rel="stylesheet" type="text/css" href="{% static 'polls/loggedin.css' %}"/>
+{% extends 'polls/base.html' %}
 
-<section class="pt-5 pb-5 bg-light inner-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h1 class="mt-0 mb-3 text-secondary">{{h.username}}, your progress: </h1>
-                <div class="breadcrumbs">
-                    <p class="mb-0 text-secondary"><a href="/polls/loggedin">Try again?</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<br>
-<br>
-<br>
-<br>
-
+{% block content %}
 <div class="container">
     <div class="row">
         <div class="table-responsive">
@@ -33,19 +15,19 @@
                 </thead>
                 <tbody id="myTable">
                 {% for test in h.test_set.all %}
-                {%if test.number_of_correct_answer > test.number_of_incorrect_answer%}
+                {% if test.number_of_correct_answer > test.number_of_incorrect_answer %}
                 <tr class="bg-success">
                     <td>{{ forloop.counter }}</td>
-                    <td>{{test.data_passing}}</td>
-                    <td>{{test.number_of_correct_answer}}</td>
-                    <td>{{test.number_of_incorrect_answer}}</td>
+                    <td>{{ test.data_passing }}</td>
+                    <td>{{ test.number_of_correct_answer }}</td>
+                    <td>{{ test.number_of_incorrect_answer }}</td>
                 </tr>
                 {% else %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{test.data_passing}}</td>
-                    <td>{{test.number_of_correct_answer}}</td>
-                    <td>{{test.number_of_incorrect_answer}}</td>
+                    <td>{{ test.data_passing }}</td>
+                    <td>{{ test.number_of_correct_answer }}</td>
+                    <td>{{ test.number_of_incorrect_answer }}</td>
                 </tr>
                 {% endif %}
                 {% endfor %}
@@ -57,3 +39,4 @@
         </div>
     </div>
 </div>
+{% endblock %}

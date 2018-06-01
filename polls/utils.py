@@ -1,10 +1,8 @@
 """ This module contains auxiliary functions """
+from json import dumps
+from lxml.etree import fromstring, XMLSyntaxError
 
-from lxml.etree import fromstring
-
-from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from .models import Question, Test, TestInfo
@@ -12,7 +10,10 @@ from .models import Question, Test, TestInfo
 
 def handle_uploaded_file(user_data):
     """ Parse xml file and add new questions to DB """
-    root = fromstring(user_data.read())
+    try:
+        root = fromstring(user_data.read())
+    except XMLSyntaxError:
+        return 'error'
     for question in root.getchildren():
         question_text = question.attrib['question_text']
         question_object = Question(question_text=question_text)
@@ -29,49 +30,38 @@ def handle_uploaded_file(user_data):
         question_object.save()
 
 
-def admin_required(func):
-    """" Check admin access rights """
-    def check_perms(request):
-        user = get_object_or_404(User, pk=request.user.pk)
-        is_member = user.groups.filter(name='admin').exists()
-        if is_member:
-            return func(request)
-        else:
-            raise PermissionDenied
-    return check_perms
-
-
-def login_required(func):
-    """" Check login access rights """
-    def check_perms(request):
-        return func(request) if request.user.id else render(request, 'polls/invalid_login.html')
-    return check_perms
-
-
 def get_results(results, current_user):
     """" Handle form data """
-    quiz = Test(user=current_user, data_passing=timezone.now())
-    quiz.save()
-    for question_id, answer_ids in results.items():
+    test = Test(user=current_user, data_passing=timezone.now())
+    test.save()
+    for question_id, answers in results.items():
 
         question = get_object_or_404(Question, pk=question_id)
+        is_text_field = question.choice_set.count() == 1
 
-        quiz_info = TestInfo(test_id=quiz)
-        quiz_info.save()
-        quiz_info.question_text = question.question_text
+        test_info = TestInfo(test=test)
+        test_info.save()
+        test_info.question_text = question.question_text
 
-        user_choices = [question.choice_set.get(pk=answer_id) for answer_id in answer_ids]
+        user_choices = answers[0].encode('utf-8') if is_text_field else [
+            question.choice_set.get(pk=int(answer_id)) for answer_id in answers
+        ]
         right_answers = question.choice_set.filter(is_right=True)
 
-        quiz_info.user_answer = ','.join(choice.choice_text for choice in user_choices)
-        quiz_info.right_answer = ','.join(answer.choice_text for answer in right_answers)
+        test_info.user_answer = dumps(user_choices) if is_text_field else dumps(
+            [choice.choice_text for choice in user_choices]
+        )
+        test_info.right_answer = dumps([answer.choice_text for answer in right_answers])
 
-        if all([c.is_right for c in user_choices]) and len(user_choices) == len(right_answers):
-            quiz.number_of_correct_answer += 1
-            quiz_info.is_user_answered_right = True
+        is_answers_correct = user_choices.lower() == right_answers[0].choice_text.lower() if is_text_field \
+            else all([c.is_right for c in user_choices]) and len(user_choices) == len(right_answers)
+
+        if is_answers_correct:
+            test.number_of_correct_answer += 1
+            test_info.is_user_answered_right = True
         else:
-            quiz.number_of_incorrect_answer += 1
-            quiz_info.is_user_answered_right = False
-        quiz_info.save()
-    quiz.save()
-    return quiz.pk
+            test.number_of_incorrect_answer += 1
+            test_info.is_user_answered_right = False
+        test_info.save()
+    test.save()
+    return test.pk

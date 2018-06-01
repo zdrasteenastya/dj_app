@@ -1,90 +1,87 @@
-a{
-color: #4682B4
+a
+{
+	color: #4682B4;
 }
-
-body{
+body
+{
 	padding: 50px;
 }
-
-.col-md-4{
-padding: 80px;
+.col-md-4
+{
+	padding: 80px;
 }
-label{
-	position: relative;
-	cursor: pointer;
+label
+{
 	color: #666;
+	cursor: pointer;
 	font-size: 30px;
+	position: relative;
 }
-
-#ph{
+#ph
+{
 	position: absolute;
 	right: 9000px;
 }
-#js{
+#js
+{
 	position: absolute;
 	right: 9000px;
 }
-#db{
+#db
+{
 	position: absolute;
 	right: 9000px;
 }
-
-
-/*Radio box*/
-#ph + .label-text:before{
-background: url("images/pyth.png") no-repeat;
+#ph + .label-text:before
+{
+	background: url("images/pyth.png") no-repeat;
+	display: inline-block;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: 2;
+	margin-right: 5px;
 	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
 	text-transform: none;
-	line-height: 2;
 	width: 2em;
-	display: inline-block;
-	margin-right: 5px;
 }
-
-#ph:checked + .label-text:before{
-	content: ".";
+#ph:checked + .label-text:before
+{
 	color: white;
+	content: ".";
 }
-
-#js + .label-text:before{
-background: url("images/js.png") no-repeat;
+#js + .label-text:before
+{
+	background: url("images/js.png") no-repeat;
+	display: inline-block;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: 2;
+	margin-right: 5px;
 	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
 	text-transform: none;
-	line-height: 2;
 	width: 2em;
-	display: inline-block;
-	margin-right: 5px;
 }
-
-#js:checked + .label-text:before{
-	content: ".";
+#js:checked + .label-text:before
+{
 	color: white;
+	content: ".";
 }
-
-#db + .label-text:before{
-background: url("images/db.png") no-repeat;
+#db + .label-text:before
+{
+	background: url("images/db.png") no-repeat;
+	display: inline-block;
 	font-style: normal;
-	font-weight: normal;
 	font-variant: normal;
-	text-transform: none;
+	font-weight: normal;
 	line-height: 2;
-	width: 2em;
-	display: inline-block;
 	margin-right: 5px;
+	text-transform: none;
+	width: 2em;
 }
-
-#db:checked + .label-text:before{
-	content: ".";
+#db:checked + .label-text:before
+{
 	color: white;
+	content: ".";
 }
-
-
-
-
-
